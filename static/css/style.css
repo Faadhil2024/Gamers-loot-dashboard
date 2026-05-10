@@ -1,0 +1,753 @@
+/* =========================
+   BODY
+========================= */
+
+body {
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(255, 96, 68, 0.12),
+            transparent 35%
+        ),
+        linear-gradient(
+            to bottom,
+            #121313,
+            #0a0a0a
+        );
+
+    color: white;
+
+    min-height: 100vh;
+
+    font-family: Arial, sans-serif;
+
+    overflow-x: hidden;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+    background: rgba(10, 10, 10, 0.4);      /* more transparent */
+    border-bottom: 1px solid rgba(255,96,68,0.15);
+    backdrop-filter: blur(20px);             /* stronger glass blur */
+    -webkit-backdrop-filter: blur(20px);     /* Safari support */
+    padding: 16px 0;
+    z-index: 1000;
+}
+
+.brand-logo {
+    font-size: 1.9rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #FF6044 !important;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: 0.3s ease;
+    text-shadow:
+        0 0 10px rgba(255,96,68,0.6),
+        0 0 25px rgba(255,96,68,0.3);
+}
+
+
+.brand-logo:hover {
+    color: white !important;
+
+    text-shadow:
+        0 0 18px rgba(255,96,68,0.9),
+        0 0 35px rgba(255,96,68,0.6);
+}
+
+/* =========================
+   HERO SECTION
+========================= */
+
+.hero-section {
+    position: relative;
+
+    height: 85vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    overflow: hidden;
+
+    text-align: center;
+
+    padding: 20px;
+
+    background: black;
+}
+
+/* =========================
+   PARTICLE GRID SYSTEM
+   (replaces the React ParticleHero component)
+========================= */
+
+/* Container that holds the particle grid, centered absolutely */
+.particle-grid-wrapper {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* The grid itself — JS will set exact width/height */
+.particle-grid {
+    position: relative;
+}
+
+/* Each dot particle */
+.particle-dot {
+    position: absolute;
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    mix-blend-mode: screen;
+    will-change: transform;
+    transition: transform 120ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* =========================
+   AMBIENT GLOW BLOBS
+   (matches the React ambient effects layer)
+========================= */
+
+.hero-ambient {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.hero-ambient-top-left {
+    position: absolute;
+    top: 5rem;
+    left: 5rem;
+    width: 20rem;
+    height: 20rem;
+    background: rgba(220, 38, 38, 0.05);
+    border-radius: 50%;
+    filter: blur(48px);
+    animation: ambientPulse 4s ease-in-out infinite;
+}
+
+.hero-ambient-bottom-right {
+    position: absolute;
+    bottom: 5rem;
+    right: 5rem;
+    width: 24rem;
+    height: 24rem;
+    background: rgba(234, 88, 12, 0.05);
+    border-radius: 50%;
+    filter: blur(48px);
+    animation: ambientPulse 4s ease-in-out infinite 2s;
+}
+
+@keyframes ambientPulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.5; }
+}
+
+/* PARTICLE CONTAINER (legacy floating style — kept for compatibility) */
+
+.particle-container {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    z-index: 1;
+}
+
+/* PARTICLES (legacy floating particles) */
+
+.particle {
+    position: absolute;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,96,68,1),
+            rgba(255,96,68,0)
+        );
+
+    animation:
+        floatParticle linear infinite;
+
+    opacity: 0.7;
+}
+
+/* PARTICLE ANIMATION */
+
+@keyframes floatParticle {
+
+    0% {
+        transform:
+            translateY(0px)
+            scale(1);
+    }
+
+    50% {
+        transform:
+            translateY(-80px)
+            scale(1.3);
+    }
+
+    100% {
+        transform:
+            translateY(-160px)
+            scale(0.8);
+    }
+}
+
+/* HERO CONTENT */
+
+.hero-content {
+    position: relative;
+
+    z-index: 10;
+
+    max-width: 1000px;
+}
+
+/* MINI BADGE */
+
+.hero-mini-badge {
+    display: inline-block;
+
+    padding: 10px 20px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255,96,68,0.08);
+
+    border:
+        1px solid rgba(255,96,68,0.25);
+
+    color: #FF6044;
+
+    letter-spacing: 2px;
+
+    font-size: 0.8rem;
+
+    font-weight: bold;
+
+    margin-bottom: 30px;
+
+    backdrop-filter: blur(10px);
+}
+
+/* HERO TITLE */
+
+.hero-title {
+    font-size: 7rem;
+
+    font-weight: 900;
+
+    letter-spacing: -4px;
+
+    line-height: 0.9;
+
+    color: white;
+
+    margin-bottom: 20px;
+
+    text-shadow:
+        0 0 20px rgba(255,96,68,0.8),
+        0 0 40px rgba(255,96,68,0.5),
+        0 0 80px rgba(255,96,68,0.2);
+}
+
+/* HERO SUBTITLE */
+
+.hero-subtitle {
+    color: rgba(255,255,255,0.75);
+
+    letter-spacing: 8px;
+
+    font-size: 1.2rem;
+
+    text-transform: uppercase;
+
+    margin-bottom: 25px;
+}
+
+/* HERO DESCRIPTION */
+
+.hero-description {
+    color: #b8b8b8;
+
+    font-size: 1.1rem;
+
+    line-height: 1.8;
+
+    max-width: 700px;
+
+    margin: auto;
+
+    margin-bottom: 45px;
+}
+
+/* HERO BUTTONS */
+
+.hero-buttons {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 20px;
+
+    flex-wrap: wrap;
+}
+
+/* PRIMARY BUTTON */
+
+.hero-btn-primary {
+    padding: 16px 34px;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #FF6044,
+            #ff381f
+        );
+
+    color: white;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    transition: 0.3s ease;
+
+    box-shadow:
+        0 0 20px rgba(255,96,68,0.3);
+}
+
+.hero-btn-primary:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 0 40px rgba(255,96,68,0.5);
+
+    color: white;
+}
+
+/* SECONDARY BUTTON */
+
+.hero-btn-secondary {
+    padding: 16px 34px;
+
+    border-radius: 14px;
+
+    border:
+        1px solid rgba(255,255,255,0.12);
+
+    color: white;
+
+    text-decoration: none;
+
+    transition: 0.3s ease;
+
+    backdrop-filter: blur(10px);
+}
+
+.hero-btn-secondary:hover {
+    border-color: #FF6044;
+
+    color: #FF6044;
+
+    transform: translateY(-4px);
+}
+
+/* INTERACTIVE HINT (matches React interactiveHint element) */
+
+.hero-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 24px;
+    margin-bottom: 0;        /* no gap below — stats sit right under */
+    color: rgba(248, 113, 113, 0.4);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+}
+
+.hero-hint-line {
+    width: 3rem;
+    height: 1px;
+}
+
+.hero-hint-line-left {
+    background: linear-gradient(to right, transparent, rgba(239, 68, 68, 0.3));
+}
+
+.hero-hint-line-right {
+    background: linear-gradient(to left, transparent, rgba(239, 68, 68, 0.3));
+}
+
+.hero-hint-text {
+    animation: hintPulse 2s ease-in-out infinite;
+}
+
+@keyframes hintPulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+}
+
+/* MOUSE GLOW */
+
+.mouse-glow {
+    position: fixed;
+
+    width: 300px;
+    height: 300px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,96,68,0.14),
+            transparent 70%
+        );
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    transform:
+        translate(-50%, -50%);
+
+    z-index: 0;
+}
+
+/* =========================
+   FILTER BOX
+========================= */
+
+.filter-box {
+    background:
+        rgba(25, 25, 25, 0.72);
+
+    border:
+        1px solid rgba(255,96,68,0.14);
+
+    border-radius: 24px;
+
+    padding: 25px;
+
+    backdrop-filter: blur(12px);
+
+    box-shadow:
+        0 0 20px rgba(255,96,68,0.08);
+}
+
+/* =========================
+   FORM INPUTS
+========================= */
+
+.form-control,
+.form-select {
+    background:
+        rgba(18,19,19,0.96);
+
+    border:
+        1px solid rgba(255,96,68,0.18);
+
+    color: white;
+
+    border-radius: 12px;
+
+    padding: 12px;
+}
+
+.form-control::placeholder {
+    color: #9ca3af;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background:
+        rgba(18,19,19,1);
+
+    border-color: #FF6044;
+
+    color: white;
+
+    box-shadow:
+        0 0 15px rgba(255,96,68,0.25);
+}
+
+/* =========================
+   GAME CARDS
+========================= */
+
+.game-card {
+    background:
+        rgba(24,24,24,0.94);
+
+    border-radius: 24px;
+
+    overflow: hidden;
+
+    border:
+        1px solid rgba(255,96,68,0.12);
+
+    transition: 0.35s ease;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.45);
+
+    height: 100%;
+
+    backdrop-filter: blur(10px);
+}
+
+.game-card:hover {
+    transform:
+        translateY(-10px)
+        scale(1.02);
+
+    border:
+        1px solid rgba(255,96,68,0.45);
+
+    box-shadow:
+        0 0 35px rgba(255,96,68,0.18);
+}
+
+/* IMAGE */
+
+.image-container {
+    position: relative;
+
+    overflow: hidden;
+}
+
+.game-image {
+    width: 100%;
+
+    height: 240px;
+
+    object-fit: cover;
+
+    transition: transform 0.4s ease;
+}
+
+.game-card:hover .game-image {
+    transform: scale(1.08);
+}
+
+/* BEST DEAL */
+
+.best-deal-badge {
+    position: absolute;
+
+    top: 14px;
+    left: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #FF6044,
+            #ff2f00
+        );
+
+    color: white;
+
+    font-size: 0.8rem;
+
+    font-weight: bold;
+
+    padding: 8px 14px;
+
+    border-radius: 999px;
+
+    box-shadow:
+        0 0 15px rgba(255,96,68,0.45);
+}
+
+/* GAME CONTENT */
+
+.game-title {
+    font-size: 1.15rem;
+
+    font-weight: 700;
+
+    color: white;
+
+    min-height: 55px;
+}
+
+.store-name {
+    color: #9ca3af;
+}
+
+/* PRICES */
+
+.old-price {
+    color: #71717a;
+
+    text-decoration: line-through;
+
+    font-size: 0.95rem;
+
+    margin-bottom: 6px;
+}
+
+.offer-row {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+.sale-price {
+    color: #FF6044;
+
+    font-size: 1.5rem;
+
+    font-weight: bold;
+}
+
+/* DISCOUNT BOX */
+
+.discount-box {
+    background:
+        linear-gradient(
+            135deg,
+            #FF6044,
+            #ff3b1f
+        );
+
+    color: white;
+
+    padding: 10px 14px;
+
+    border-radius: 14px;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 0 15px rgba(255,96,68,0.3);
+}
+
+/* LOADING SCREEN */
+
+.loading-screen {
+    position: fixed;
+
+    width: 100%;
+    height: 100vh;
+
+    background: #0a0a0a;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    color: #FF6044;
+
+    z-index: 9999;
+}
+
+/* EMPTY STATE */
+
+.empty-state {
+    padding: 50px;
+
+    background:
+        rgba(30,30,30,0.8);
+
+    border-radius: 20px;
+
+    border:
+        1px solid rgba(255,96,68,0.2);
+
+    margin-top: 40px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+    .hero-title {
+        font-size: 4rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+
+        letter-spacing: 4px;
+    }
+
+    .hero-description {
+        font-size: 1rem;
+    }
+
+    .hero-section {
+        height: 75vh;
+    }
+
+    .game-image {
+        height: 200px;
+    }
+
+    .brand-logo {
+        font-size: 1.5rem;
+    }
+}
+
+/* =========================
+   HERO STATS
+========================= */
+
+.hero-stats {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+}
+
+.stat-box {
+    text-align: center;
+}
+
+.stat-box h3 {
+    font-size: 1.4rem;       /* smaller than before */
+    font-weight: 900;
+    color: white;            /* white instead of orange */
+    margin-bottom: 4px;
+}
+.stat-box span {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
