@@ -751,3 +751,44 @@ body {
     text-transform: uppercase;
     letter-spacing: 2px;
 }
+
+/* =========================
+   CURRENCY SELECT
+========================= */
+
+.currency-select {
+    background: rgba(18,19,19,0.96);
+    border: 1px solid rgba(255,96,68,0.18);  /* match other selects */
+    color: white;                              /* was #FF6044 */
+    border-radius: 12px;
+    font-weight: normal;                       /* was bold */
+}
+
+.currency-select:focus {
+    border-color: #FF6044;
+    box-shadow: 0 0 15px rgba(255,96,68,0.25);
+    color: white;                              /* was #FF6044 */
+    background: rgba(18,19,19,1);
+}
+
+/* =========================
+   CURRENCY STATUS BAR
+========================= */
+
+.currency-bar {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: rgba(255,96,68,0.08);
+    border: 1px solid rgba(255,96,68,0.2);
+    border-radius: 12px;
+    color: rgba(255,255,255,0.6);
+    font-size: 0.85rem;
+}
+
+#currencyRateInfo {
+    color: #FF6044;
+    font-weight: bold;
+}
+

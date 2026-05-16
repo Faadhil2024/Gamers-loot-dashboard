@@ -31,7 +31,7 @@
 
 <!-- NAVBAR -->
 <nav class="navbar navbar-dark shadow-lg">
-    <div class="container-fluid px-4">   <!-- container-fluid = full width, px-4 = small padding -->
+    <div class="container-fluid px-4">
         <a class="navbar-brand brand-logo" href="/">
             GAMERS LOOT
         </a>
@@ -41,18 +41,15 @@
 <!-- HERO SECTION -->
 <section class="hero-section" id="hero">
 
-    <!-- Particle Grid (JS populates) -->
     <div class="particle-grid-wrapper">
         <div class="particle-grid" id="particleGrid"></div>
     </div>
 
-    <!-- Ambient Glow Blobs -->
     <div class="hero-ambient">
         <div class="hero-ambient-top-left"></div>
         <div class="hero-ambient-bottom-right"></div>
     </div>
 
-    <!-- Hero Content -->
     <div class="container text-center hero-content">
 
         <div class="hero-mini-badge">
@@ -68,62 +65,41 @@
             and premium PC game deals across top stores.
         </p>
 
-        <!-- HERO BUTTONS -->
         <div class="hero-buttons">
             <a href="#dealsSection" class="btn hero-btn-primary">
                 Explore Deals
             </a>
-            <a
-                href="https://www.cheapshark.com"
-                target="_blank"
-                class="btn hero-btn-secondary"
-            >
+            <a href="https://www.cheapshark.com" target="_blank" class="btn hero-btn-secondary">
                 Deal Source
             </a>
         </div>
 
-        
-
-        <!-- STATS -->
         <div class="hero-stats">
-            <div class="stat-box">
-                <h3>100+</h3>
-                <span>Game Deals</span>
-            </div>
-            <div class="stat-box">
-                <h3>24H</h3>
-                <span>Smart Cache</span>
-            </div>
-            <div class="stat-box">
-                <h3>15+</h3>
-                <span>Stores</span>
-            </div>
+            <div class="stat-box"><h3>100+</h3><span>Game Deals</span></div>
+            <div class="stat-box"><h3>24H</h3><span>Smart Cache</span></div>
+            <div class="stat-box"><h3>15+</h3><span>Stores</span></div>
         </div>
-<!-- INTERACTIVE HINT -->
+
         <div class="hero-hint">
             <div class="hero-hint-line hero-hint-line-left"></div>
             <span class="hero-hint-text">Move to Interact</span>
             <div class="hero-hint-line hero-hint-line-right"></div>
         </div>
+
     </div>
 
 </section>
 
 <!-- MAIN CONTENT -->
-<div
-    class="container py-4"
-    id="mainContent"
-    style="display:none;"
->
+<div class="container py-4" id="mainContent" style="display:none;">
+
     <!-- FILTER SECTION -->
-    <div class="filter-box mb-5">
-
+    <div class="filter-box mb-4">
         <form method="GET" id="filterForm">
-
-            <div class="row g-3">
+            <div class="row g-3 align-items-center">
 
                 <!-- SEARCH -->
-                <div class="col-lg-5">
+                <div class="col-lg-4">
                     <input
                         type="text"
                         name="search"
@@ -141,21 +117,18 @@
                         step="0.01"
                         name="max_price"
                         class="form-control"
-                        placeholder="Max Price"
+                        placeholder="Max Price (USD)"
                         value="{{ request.args.get('max_price', '') }}"
                         onkeyup="autoSubmit()"
                     >
                 </div>
 
                 <!-- STORE -->
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <select name="store" class="form-select" onchange="autoSubmit()">
                         <option value="">All Stores</option>
                         {% for store in stores %}
-                            <option
-                                value="{{ store }}"
-                                {% if request.args.get('store') == store %}selected{% endif %}
-                            >
+                            <option value="{{ store }}" {% if request.args.get('store') == store %}selected{% endif %}>
                                 {{ store }}
                             </option>
                         {% endfor %}
@@ -172,20 +145,32 @@
                     </select>
                 </div>
 
+                <!-- CURRENCY -->
+                <div class="col-lg-2">
+                    <select id="currencySelect" class="form-select currency-select">
+                        <option value="USD">USD $</option>
+                        <option value="MYR">MYR RM</option>
+                        <option value="AED">AED DHS</option>
+                        <option value="JPY">JPY ¥</option>
+                        <option value="EUR">EUR €</option>
+                    </select>
+                </div>
+
             </div>
-
         </form>
+    </div>
 
+    <!-- CURRENCY STATUS BAR -->
+    <div id="currencyBar" class="currency-bar mb-4">
+        <span id="currencyBarText"></span>
+        <span id="currencyRateInfo"></span>
     </div>
 
     <!-- TOP DEALS SECTION -->
     {% if top_deals %}
     <div class="mb-5">
-
         <h3 class="mb-3">🔥 Top Deals (70%+ OFF)</h3>
-
         <div class="row g-3">
-
             {% for game in top_deals %}
             <div class="col-md-4">
                 <div class="game-card">
@@ -193,18 +178,15 @@
                     <div class="p-3">
                         <h6>{{ game.title }}</h6>
                         <p class="text-info">
-                            ${{ game.sale_price }} → <del>${{ game.normal_price }}</del>
+                            <span class="price-tag" data-usd="{{ game.sale_price }}">${{ game.sale_price }}</span>
+                            → <del><span class="price-tag" data-usd="{{ game.normal_price }}">${{ game.normal_price }}</span></del>
                         </p>
-                        <span class="discount-box">
-                            -{{ game.discount }}%
-                        </span>
+                        <span class="discount-box">-{{ game.discount }}%</span>
                     </div>
                 </div>
             </div>
             {% endfor %}
-
         </div>
-
     </div>
     {% endif %}
 
@@ -212,7 +194,6 @@
     <div id="dealsSection" class="row g-4">
 
         {% if games %}
-
             {% for game in games %}
             <div class="col-md-6 col-lg-4">
                 <div class="game-card h-100">
@@ -220,32 +201,25 @@
                     <div class="image-container">
                         <img src="{{ game.thumbnail }}" class="game-image">
                         {% if game.best_deal %}
-                        <div class="best-deal-badge">
-                            🔥 BEST DEAL
-                        </div>
+                        <div class="best-deal-badge">🔥 BEST DEAL</div>
                         {% endif %}
                     </div>
 
                     <div class="p-3">
-
                         <h5 class="game-title">{{ game.title }}</h5>
-
                         <p class="store-name">{{ game.store }}</p>
 
                         <div class="price-section mt-4">
                             <div class="old-price">
-                                ${{ game.normal_price }}
+                                <span class="price-tag" data-usd="{{ game.normal_price }}">${{ game.normal_price }}</span>
                             </div>
                             <div class="offer-row">
                                 <div class="sale-price">
-                                    ${{ game.sale_price }}
+                                    <span class="price-tag" data-usd="{{ game.sale_price }}">${{ game.sale_price }}</span>
                                 </div>
-                                <div class="discount-box">
-                                    -{{ game.discount }}%
-                                </div>
+                                <div class="discount-box">-{{ game.discount }}%</div>
                             </div>
                         </div>
-
                     </div>
 
                 </div>
@@ -253,50 +227,36 @@
             {% endfor %}
 
         {% else %}
-
             <div class="col-12 text-center mt-5">
                 <div class="empty-state">
                     <h3>🎮 No Game Deals Found</h3>
-                    <p class="text-secondary">
-                        Try adjusting your filters or search again.
-                    </p>
+                    <p class="text-secondary">Try adjusting your filters or search again.</p>
                 </div>
             </div>
-
         {% endif %}
 
     </div>
 
 </div>
 
-<!-- SCRIPTS -->
+<!-- ═══════════════════════════════
+     SCRIPTS
+═══════════════════════════════ -->
+
 <script>
 window.addEventListener("load", function () {
     document.getElementById("loading").style.display = "none";
     document.getElementById("mainContent").style.display = "block";
 });
 
-function saveFavorite(title) {
-    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-    if (!favorites.includes(title)) {
-        favorites.push(title);
-        localStorage.setItem("favorites", JSON.stringify(favorites));
-        alert("Saved ⭐");
-    } else {
-        alert("Already saved ⚠️");
-    }
-}
-
 let submitTimeout;
 function autoSubmit() {
     clearTimeout(submitTimeout);
-    submitTimeout = setTimeout(() => {
-        document.getElementById("filterForm").submit();
-    }, 400);
+    submitTimeout = setTimeout(() => document.getElementById("filterForm").submit(), 400);
 }
 </script>
 
-<!-- Mouse glow tracker -->
+<!-- Mouse glow -->
 <script>
 (function () {
     const glow = document.getElementById('mouseGlow');
@@ -304,6 +264,89 @@ function autoSubmit() {
         glow.style.left = e.clientX + 'px';
         glow.style.top  = e.clientY + 'px';
     });
+})();
+</script>
+
+<!-- ── Currency Converter ── -->
+<script>
+(function () {
+
+    const CURRENCIES = {
+        USD: { symbol: '$',    name: 'US Dollar',        decimals: 2 },
+        MYR: { symbol: 'RM ',  name: 'Malaysian Ringgit', decimals: 2 },
+        AED: { symbol: 'د.إ ', name: 'UAE Dirham',        decimals: 2 },
+        JPY: { symbol: '¥',    name: 'Japanese Yen',      decimals: 0 },
+        EUR: { symbol: '€',    name: 'Euro',              decimals: 2 },
+    };
+
+    /* Fallback rates in case the API is unavailable */
+    let rates = { USD: 1, MYR: 4.47, AED: 3.67, JPY: 155.5, EUR: 0.92 };
+    let liveRates = false;
+    let activeCurrency = localStorage.getItem('gl_currency') || 'USD';
+
+    /* Fetch live rates — open.er-api.com is free, no key needed */
+    fetch('https://open.er-api.com/v6/latest/USD')
+        .then(r => r.json())
+        .then(data => {
+            if (data && data.rates) {
+                rates = {
+                    USD: 1,
+                    MYR: data.rates.MYR,
+                    AED: data.rates.AED,
+                    JPY: data.rates.JPY,
+                    EUR: data.rates.EUR,
+                };
+                liveRates = true;
+                applyConversion(activeCurrency);
+            }
+        })
+        .catch(() => applyConversion(activeCurrency));
+
+    function format(amount, currency) {
+        const c = CURRENCIES[currency];
+        return c.symbol + (amount).toFixed(c.decimals);
+    }
+
+    function applyConversion(currency) {
+        activeCurrency = currency;
+        localStorage.setItem('gl_currency', currency);
+
+        /* Convert every price tag */
+        document.querySelectorAll('.price-tag').forEach(el => {
+            const usd = parseFloat(el.dataset.usd);
+            if (!isNaN(usd)) {
+                el.textContent = format(usd * rates[currency], currency);
+            }
+        });
+
+        /* Status bar */
+        const bar      = document.getElementById('currencyBar');
+        const barText  = document.getElementById('currencyBarText');
+        const rateInfo = document.getElementById('currencyRateInfo');
+
+        if (currency === 'USD') {
+            bar.style.display = 'none';
+        } else {
+            bar.style.display = 'flex';
+            barText.textContent  = '💱 Prices in ' + CURRENCIES[currency].name + ' (' + currency + ')';
+            rateInfo.textContent = '  ·  1 USD = ' + format(rates[currency], currency)
+                                 + (liveRates ? '  · live rate' : '  · estimated rate');
+        }
+
+        /* Keep dropdown in sync */
+        const sel = document.getElementById('currencySelect');
+        if (sel) sel.value = currency;
+    }
+
+    /* Wire up dropdown — wait for DOM */
+    window.addEventListener('load', function () {
+        const sel = document.getElementById('currencySelect');
+        if (!sel) return;
+        sel.value = activeCurrency;
+        sel.addEventListener('change', function () { applyConversion(this.value); });
+        applyConversion(activeCurrency);
+    });
+
 })();
 </script>
 
@@ -323,14 +366,10 @@ function autoSubmit() {
     const centerCol = Math.floor(ROWS / 2);
     const particles = [];
 
-    /* Build the dot grid */
     for (let i = 0; i < ROWS * ROWS; i++) {
         const row  = Math.floor(i / ROWS);
         const col  = i % ROWS;
-        const dist = Math.sqrt(
-            Math.pow(row - centerRow, 2) + Math.pow(col - centerCol, 2)
-        );
-
+        const dist = Math.sqrt(Math.pow(row - centerRow, 2) + Math.pow(col - centerCol, 2));
         const scale     = Math.max(0.1,  1.2  - dist * 0.12);
         const opacity   = Math.max(0.05, 1    - dist * 0.1);
         const lightness = Math.max(15,   75   - dist * 6);
@@ -339,45 +378,36 @@ function autoSubmit() {
         const p = document.createElement('div');
         p.className = 'particle-dot';
         p.style.cssText = [
-            'left:'       + (col * SPACING) + 'px',
-            'top:'        + (row * SPACING) + 'px',
+            'left:'      + (col * SPACING) + 'px',
+            'top:'       + (row * SPACING) + 'px',
             'transform:scale(' + scale + ')',
-            'opacity:'    + opacity,
+            'opacity:'   + opacity,
             'background:hsl(4,85%,' + lightness + '%)',
             'box-shadow:0 0 ' + (glowSize * 0.2) + 'rem 0 hsl(4,85%,60%)',
-            'z-index:'    + Math.round(ROWS * ROWS - dist * 5)
+            'z-index:'   + Math.round(ROWS * ROWS - dist * 5)
         ].join(';');
 
         grid.appendChild(p);
         particles.push({ el: p, dist, scale });
     }
 
-    /* State */
-    var cursor       = { x: 0, y: 0 };
-    var staticCursor = { x: 0, y: 0 };
-    var isAuto       = true;
-    var isStatic     = false;
-    var startTime    = Date.now();
-    var lastMove     = Date.now();
-    var idleTimer    = null;
-    var autoTimer    = null;
+    var cursor = { x: 0, y: 0 }, staticCursor = { x: 0, y: 0 };
+    var isAuto = true, isStatic = false;
+    var startTime = Date.now(), lastMove = Date.now();
+    var idleTimer = null, autoTimer = null;
 
     function applyPositions() {
         particles.forEach(function (p) {
-            var damp     = Math.max(0.3, 1 - p.dist * 0.08);
-            var delay    = p.dist * 8;
-            var duration = 120 + p.dist * 20;
+            var damp = Math.max(0.3, 1 - p.dist * 0.08);
             setTimeout(function () {
                 p.el.style.transform  = 'translate(' + (cursor.x * damp) + 'px,' + (cursor.y * damp) + 'px) scale(' + p.scale + ')';
-                p.el.style.transition = 'transform ' + duration + 'ms cubic-bezier(0.25,0.46,0.45,0.94)';
-            }, delay);
+                p.el.style.transition = 'transform ' + (120 + p.dist * 20) + 'ms cubic-bezier(0.25,0.46,0.45,0.94)';
+            }, p.dist * 8);
         });
     }
 
-    /* Animation loop */
     (function tick() {
         var t = (Date.now() - startTime) * 0.001;
-
         if (isAuto) {
             cursor.x = Math.sin(t * 0.3) * 200 + Math.sin(t * 0.17) * 100;
             cursor.y = Math.cos(t * 0.2) * 150 + Math.cos(t * 0.23) * 80;
@@ -385,206 +415,98 @@ function autoSubmit() {
         } else if (isStatic) {
             var age = Date.now() - lastMove;
             if (age > 200) {
-                var str  = Math.min((age - 200) / 1000, 1);
+                var str = Math.min((age - 200) / 1000, 1);
                 cursor.x = staticCursor.x + Math.sin(t * 1.5) * 20 * str;
                 cursor.y = staticCursor.y + Math.cos(t * 1.2) * 16 * str;
                 applyPositions();
             }
         }
-
         requestAnimationFrame(tick);
     })();
 
-    /* Mouse interaction */
     document.getElementById('hero').addEventListener('mousemove', function (e) {
-        var cx   = window.innerWidth  / 2;
-        var cy   = window.innerHeight / 2;
-        cursor.x = (e.clientX - cx) * 0.8;
-        cursor.y = (e.clientY - cy) * 0.8;
-        staticCursor.x = cursor.x;
-        staticCursor.y = cursor.y;
-        isAuto   = false;
-        isStatic = false;
-        lastMove = Date.now();
+        var cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+        cursor.x = (e.clientX - cx) * 0.8; cursor.y = (e.clientY - cy) * 0.8;
+        staticCursor.x = cursor.x; staticCursor.y = cursor.y;
+        isAuto = false; isStatic = false; lastMove = Date.now();
         applyPositions();
-
-        clearTimeout(idleTimer);
-        clearTimeout(autoTimer);
-
-        /* After 500 ms of stillness → subtle breathing animation */
+        clearTimeout(idleTimer); clearTimeout(autoTimer);
         idleTimer = setTimeout(function () { isStatic = true; }, 500);
-
-        /* After 4 s of no movement → return to auto-mode */
         autoTimer = setTimeout(function () {
-            if (Date.now() - lastMove >= 4000) {
-                isAuto     = true;
-                isStatic   = false;
-                startTime  = Date.now();
-            }
+            if (Date.now() - lastMove >= 4000) { isAuto = true; isStatic = false; startTime = Date.now(); }
         }, 4000);
     });
 
-    /* Touch support */
     document.getElementById('hero').addEventListener('touchmove', function (e) {
-        var touch = e.touches[0];
-        var cx    = window.innerWidth  / 2;
-        var cy    = window.innerHeight / 2;
-        cursor.x  = (touch.clientX - cx) * 0.8;
-        cursor.y  = (touch.clientY - cy) * 0.8;
-        staticCursor.x = cursor.x;
-        staticCursor.y = cursor.y;
-        isAuto    = false;
-        isStatic  = false;
-        lastMove  = Date.now();
+        var touch = e.touches[0], cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+        cursor.x = (touch.clientX - cx) * 0.8; cursor.y = (touch.clientY - cy) * 0.8;
+        staticCursor.x = cursor.x; staticCursor.y = cursor.y;
+        isAuto = false; isStatic = false; lastMove = Date.now();
         applyPositions();
     }, { passive: true });
-
 })();
 </script>
-<!-- WebGL Smoke Background (everywhere except hero) -->
-<canvas id="smokeCanvas" style="
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    pointer-events: none;
-    display: block;
-"></canvas>
 
+<!-- WebGL Smoke Background -->
+<canvas id="smokeCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;display:block;"></canvas>
 <script>
 (function () {
-
-    /* ── Shader sources ── */
-    const VERT = `#version 300 es
-precision highp float;
-in vec4 position;
-void main(){ gl_Position = position; }`;
-
+    const VERT = `#version 300 es\nprecision highp float;\nin vec4 position;\nvoid main(){ gl_Position = position; }`;
     const FRAG = `#version 300 es
 precision highp float;
 out vec4 O;
 uniform float time;
 uniform vec2 resolution;
 uniform vec3 u_color;
-
 #define FC gl_FragCoord.xy
 #define R resolution
 #define T (time+660.)
-
 float rnd(vec2 p){p=fract(p*vec2(12.9898,78.233));p+=dot(p,p+34.56);return fract(p.x*p.y);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p),u=f*f*(3.-2.*f);return mix(mix(rnd(i),rnd(i+vec2(1,0)),u.x),mix(rnd(i+vec2(0,1)),rnd(i+1.),u.x),u.y);}
 float fbm(vec2 p){float t=.0,a=1.;for(int i=0;i<5;i++){t+=a*noise(p);p*=mat2(1,-1.2,.2,1.2)*2.;a*=.5;}return t;}
-
 void main(){
-  vec2 uv=(FC-.5*R)/R.y;
-  vec3 col=vec3(1);
-  uv.x+=.25;
-  uv*=vec2(2,1);
-
-  float n=fbm(uv*.28-vec2(T*.01,0));
-  n=noise(uv*3.+n*2.);
-
+  vec2 uv=(FC-.5*R)/R.y; vec3 col=vec3(1); uv.x+=.25; uv*=vec2(2,1);
+  float n=fbm(uv*.28-vec2(T*.01,0)); n=noise(uv*3.+n*2.);
   col.r-=fbm(uv+vec2(0,T*.015)+n);
   col.g-=fbm(uv*1.003+vec2(0,T*.015)+n+.003);
   col.b-=fbm(uv*1.006+vec2(0,T*.015)+n+.006);
-
-  col=mix(col, u_color, dot(col,vec3(.21,.71,.07)));
-
-  col=mix(vec3(.08),col,min(time*.1,1.));
-  col=clamp(col,.08,1.);
-  O=vec4(col,1);
+  col=mix(col,u_color,dot(col,vec3(.21,.71,.07)));
+  col=mix(vec3(.08),col,min(time*.1,1.)); col=clamp(col,.08,1.); O=vec4(col,1);
 }`;
-
-    /* ── Setup ── */
     const canvas = document.getElementById('smokeCanvas');
     const gl = canvas.getContext('webgl2');
-
-    if (!gl) {
-        console.warn('WebGL2 not supported — smoke background disabled.');
-        return;
-    }
-
-    function compileShader(type, src) {
-        const s = gl.createShader(type);
-        gl.shaderSource(s, src);
-        gl.compileShader(s);
-        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-            console.error('Shader error:', gl.getShaderInfoLog(s));
-        }
-        return s;
-    }
-
-    const vs      = compileShader(gl.VERTEX_SHADER,   VERT);
-    const fs      = compileShader(gl.FRAGMENT_SHADER, FRAG);
-    const program = gl.createProgram();
-    gl.attachShader(program, vs);
-    gl.attachShader(program, fs);
-    gl.linkProgram(program);
-
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-        console.error('Program link error:', gl.getProgramInfoLog(program));
-        return;
-    }
-
-    /* ── Geometry (full-screen quad) ── */
+    if (!gl) return;
+    function cs(type, src) { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; }
+    const prog = gl.createProgram();
+    gl.attachShader(prog, cs(gl.VERTEX_SHADER, VERT));
+    gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, FRAG));
+    gl.linkProgram(prog);
     const buf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,1,-1,-1,1,1,1,-1]), gl.STATIC_DRAW);
-
-    const posLoc = gl.getAttribLocation(program, 'position');
-    gl.enableVertexAttribArray(posLoc);
-    gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
-
-    /* ── Uniform locations ── */
-    const uRes   = gl.getUniformLocation(program, 'resolution');
-    const uTime  = gl.getUniformLocation(program, 'time');
-    const uColor = gl.getUniformLocation(program, 'u_color');
-
-    /* ── Color: match your #FF6044 brand ── */
-    const SMOKE_COLOR = [1.0, 0.08, 0.08];
- 
-
-    /* ── Resize ── */
-    function resize() {
-        const dpr = Math.max(1, window.devicePixelRatio);
-        canvas.width  = window.innerWidth  * dpr;
-        canvas.height = window.innerHeight * dpr;
-        gl.viewport(0, 0, canvas.width, canvas.height);
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    /* ── Hero section detection ──
-       We fade the canvas OUT over the hero section and fade it IN below it. */
+    const pos = gl.getAttribLocation(prog, 'position');
+    gl.enableVertexAttribArray(pos);
+    gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+    const uRes = gl.getUniformLocation(prog, 'resolution');
+    const uTime = gl.getUniformLocation(prog, 'time');
+    const uColor = gl.getUniformLocation(prog, 'u_color');
+    function resize() { const d = Math.max(1, window.devicePixelRatio); canvas.width = window.innerWidth*d; canvas.height = window.innerHeight*d; gl.viewport(0,0,canvas.width,canvas.height); }
+    resize(); window.addEventListener('resize', resize);
     const hero = document.getElementById('hero');
-
-    function updateOpacity() {
-        if (!hero) return;
-        const heroBottom = hero.getBoundingClientRect().bottom;
-        /* fully hidden while hero is still on screen, fades in as you scroll past */
-        const fade = Math.max(0, Math.min(1, -heroBottom / 200));
-        canvas.style.opacity = fade;
-    }
-    window.addEventListener('scroll', updateOpacity, { passive: true });
-    updateOpacity();
-
-    /* ── Render loop ── */
+    function updateOpacity() { if (!hero) return; canvas.style.opacity = Math.max(0, Math.min(1, -hero.getBoundingClientRect().bottom / 200)); }
+    window.addEventListener('scroll', updateOpacity, { passive: true }); updateOpacity();
     function loop(now) {
-        gl.clearColor(0, 0, 0, 1);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        gl.useProgram(program);
+        gl.clearColor(0,0,0,1); gl.clear(gl.COLOR_BUFFER_BIT); gl.useProgram(prog);
         gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-        gl.uniform2f(uRes,   canvas.width, canvas.height);
-        gl.uniform1f(uTime,  now * 1e-3);
-        gl.uniform3fv(uColor, SMOKE_COLOR);
+        gl.uniform2f(uRes, canvas.width, canvas.height);
+        gl.uniform1f(uTime, now*1e-3);
+        gl.uniform3fv(uColor, [1.0, 0.08, 0.08]);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
         requestAnimationFrame(loop);
     }
     requestAnimationFrame(loop);
-
 })();
 </script>
+
 </body>
 </html>
